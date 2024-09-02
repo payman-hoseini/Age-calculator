@@ -19,3 +19,8 @@
   font-style: italic;
   src: url(./../../public/assets/fonts/Poppins-ExtraBoldItalic.ttf);
 }
+
+input::placeholder{
+  font-size:xx-large;
+  color: hsl(0, 1%, 44%);
+}
