@@ -39,10 +39,10 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
         (wrongYearFlag) ? setWrongYear(true) : setWrongYear(false);
 
         // calculate age
-        let now = new Date();
-        let currentYear = now.getFullYear()
-        let currentMonth = now.getMonth()
-        let currentDay = now.getDate()
+        let now = miladi_be_shamsi(new Date().getFullYear() , new Date().getMonth() , new Date().getDate());
+        let currentYear = now[0]
+        let currentMonth = now[1]
+        let currentDay = now[2]
         let yearAge;
         let monthAge;
         let dayAge;
@@ -79,15 +79,34 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
             setYearAge(yearAge);
         }
     }
-
-
-    // console.log(miladi_be_shamsi(new Date().getFullYear() , new Date().getMonth() , new Date().getDate()))
+    function miladi_be_shamsi(gy : any, gm : any, gd : any) {
+        let g_d_m, jy, jm, jd, gy2, days;
+        g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        gy2 = (gm > 2) ? (gy + 1) : gy;
+        days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm];
+        jy = -1595 + (33 * ~~(days / 12053));
+        days %= 12053;
+        jy += 4 * ~~(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            jy += ~~((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        if (days < 186) {
+            jm = 1 + ~~(days / 31);
+            jd = 1 + (days % 31);
+        } else {
+            jm = 7 + ~~((days - 186) / 30);
+            jd = 1 + ((days - 186) % 30);
+        }
+        return [ jy , jm , jd ];
+    }
     return (
         <>
-            <form action="#" className="flex w-[80%]">
+            <form action="#" className="flex md:w-[80%]">
                 <div className="flex flex-col">
                     <label htmlFor="day" className={` tracking-widest ${(emptyDayErr || wrongDay) ? 'text-Light-red' : 'text-Smokey-grey'}`}>DAY</label>
-                    <input onChange={dayChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 w-[75%] p-4 focus:outline-Purple ${(emptyDayErr || wrongDay) ? 'border-Light-red' : 'border-Off-white'}`} type="number" name="day" placeholder="DD"/>
+                    <input onChange={dayChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 md:w-[75%] w-[90%] p-4 focus:outline-Purple ${(emptyDayErr || wrongDay) ? 'border-Light-red' : 'border-Off-white'}`} type="number" name="day" placeholder="DD"/>
                     {
                         emptyDayErr && <span className="mt-2 italic text-sm text-Light-red">This field is requierd</span>
                     }
@@ -97,7 +116,7 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="" className={` tracking-widest ${(emptyMonthErr || wrongMonth) ? 'text-Light-red' : 'text-Smokey-grey'}`}>MONTH</label>
-                    <input onChange={monthChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 w-[75%] p-4 focus:outline-Purple ${(emptyMonthErr || wrongMonth) ? 'border-Light-red' : 'border-Off-white'}`} type="number" placeholder="MM"/>
+                    <input onChange={monthChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 md:w-[75%] w-[90%] p-4 focus:outline-Purple ${(emptyMonthErr || wrongMonth) ? 'border-Light-red' : 'border-Off-white'}`} type="number" placeholder="MM"/>
                     {
                         emptyMonthErr && <span className="mt-2 italic text-sm text-Light-red">This field is requierd</span>
                     }
@@ -107,7 +126,7 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="" className={` tracking-widest ${(emptyYearErr || wrongYear) ? 'text-Light-red' : 'text-Smokey-grey'}`}>YEAR</label>
-                    <input onChange={yearChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 w-[75%] p-4 focus:outline-Purple ${(emptyYearErr || wrongYear) ? 'border-Light-red' : 'border-Off-white'}`} type="number" placeholder="YYYY"/>
+                    <input onChange={yearChangeHandler} className={`mt-1 text-2xl rounded-lg border-2 md:w-[75%] w-[90%] p-4 focus:outline-Purple ${(emptyYearErr || wrongYear) ? 'border-Light-red' : 'border-Off-white'}`} type="number" placeholder="YYYY"/>
                     {
                         emptyYearErr && <span className="mt-2 italic text-sm text-Light-red">This field is requierd</span>
                     }
@@ -116,9 +135,9 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
                     }
                 </div>
             </form>
-            <div className="mt-1 flex items-center">
+            <div className="my-10 md:my-0 md:mt-1 flex items-center relative md:static">
                 <p className="h-[2px] w-full bg-Off-white"></p>
-                <button onClick={calculateAge} className="bg-Purple rounded-full p-5 hover:bg-Off-black">
+                <button onClick={calculateAge} className="bg-Purple rounded-full p-5 scale-75 md:scale-100  hover:bg-Off-black md:static  absolute left-[40%]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="46" height="44" viewBox="0 0 46 44"><g fill="none" stroke="#FFF" strokeWidth="2"><path d="M1 22.019C8.333 21.686 23 25.616 23 44M23 44V0M45 22.019C37.667 21.686 23 25.616 23 44"/></g></svg>
                 </button>
             </div>

@@ -21,6 +21,13 @@
 }
 
 input::placeholder{
-  font-size:xx-large;
+  font-size:x-large;
   color: hsl(0, 1%, 44%);
+}
+
+@media (min-width: 768px) {
+  input::placeholder{
+    font-size:xx-large;
+    color: hsl(0, 1%, 44%);
+  }
 }
