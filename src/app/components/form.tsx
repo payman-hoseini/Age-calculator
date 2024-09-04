@@ -22,13 +22,14 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
     }
 
     function calculateAge (){
+        let now = miladi_be_shamsi(new Date().getFullYear() , new Date().getMonth() + 1  , new Date().getDate());
         //empty inputs
         let emptyDayFlag = day == undefined || day == '';
         let emptyMonthFlag = month == undefined || month == '';
         let emptyYearFlag = year == undefined || year == '';
         let wrongDayFlag =  day < 0 || day > 31;
         let wrongMonthFlag =  month <= 0 || month > 12;
-        let wrongYearFlag =  year <= 0 || year > (new Date().getFullYear());
+        let wrongYearFlag =  year <= 0 || year > (now[0]);
 
         (emptyDayFlag) ? setEmptyDayErr(true) : setEmptyDayErr(false);
         (emptyMonthFlag) ? setEmptyMonthErr(true) : setEmptyMonthErr(false);
@@ -39,7 +40,6 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
         (wrongYearFlag) ? setWrongYear(true) : setWrongYear(false);
 
         // calculate age
-        let now = miladi_be_shamsi(new Date().getFullYear() , new Date().getMonth() , new Date().getDate());
         let currentYear = now[0]
         let currentMonth = now[1]
         let currentDay = now[2]
@@ -83,7 +83,7 @@ export default function Form({day , setDay , month , setMonth , year , setYear ,
         let g_d_m, jy, jm, jd, gy2, days;
         g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
         gy2 = (gm > 2) ? (gy + 1) : gy;
-        days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm];
+        days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
         jy = -1595 + (33 * ~~(days / 12053));
         days %= 12053;
         jy += 4 * ~~(days / 1461);
